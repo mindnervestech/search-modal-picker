@@ -29,18 +29,24 @@ export default class RNModalPicker extends PureComponent {
     pickerStyle,
     textStyle,
     dropDownImageStyle,
-    dropDownImage
+    dropDownImage,
+    inputHeadingText,
+    inputHeadingTextStyle,
+    selectedCityStyle,
+    textBoxStyle
   ) {
-    return (
-      <View style={pickerStyle}>
-        <Text style={textStyle}>{defaultText}</Text>
-        <Image
-          style={dropDownImageStyle}
-          resizeMode="contain"
-          source={dropDownImage}
-        />
+    return textBoxStyle !== undefined ? (
+      <View style={textBoxStyle}>
+        <Text style={inputHeadingTextStyle}>{inputHeadingText}</Text>
+        <View style={{ flexDirection: 'row' }}>
+          <Text style={selectedCityStyle}>{defaultText}</Text>
+        </View>
       </View>
-    );
+    ) : (
+        <View style={[pickerStyle, { alignItems: 'center' }]}>
+          <Text style={textStyle}>{defaultText}</Text>
+        </View>
+      );
   }
 
   _setSelectedValue(
@@ -48,18 +54,24 @@ export default class RNModalPicker extends PureComponent {
     pickerStyle,
     textStyle,
     dropDownImageStyle,
-    dropDownImage
+    dropDownImage,
+    inputHeadingText,
+    inputHeadingTextStyle,
+    selectedCityStyle,
+    textBoxStyle
   ) {
-    return (
-      <View style={pickerStyle}>
-        <Text style={textStyle}>{defaultText}</Text>
-        <Image
-          style={dropDownImageStyle}
-          resizeMode="contain"
-          source={dropDownImage}
-        />
+    return textBoxStyle !== undefined ? (
+      <View style={textBoxStyle}>
+        <Text style={inputHeadingTextStyle}>{inputHeadingText}</Text>
+        <View style={{ flexDirection: 'row' }}>
+          <Text style={selectedCityStyle}>{defaultText}</Text>
+        </View>
       </View>
-    );
+    ) : (
+        <View style={[pickerStyle, { alignItems: 'center' }]}>
+          <Text style={textStyle}>{defaultText}</Text>
+        </View>
+      );
   }
 
   componentDidMount() {
@@ -81,16 +93,16 @@ export default class RNModalPicker extends PureComponent {
         const textData = searchText.toUpperCase();
         return itemData.startsWith(textData);
       });
-      if (newData.length == 0) {
-        const newObj = [{ id: 999, name: searchText }]
-        this.setState({
-          dataSource: [...newObj]
-        });
-      } else {
-        this.setState({
-          dataSource: [...newData]
-        });
-      }
+      // if (newData.length == 0) {
+      //   const newObj = [{ id: 999, name: searchText }]
+      //   this.setState({
+      //     dataSource: [...newObj]
+      //   });
+      // } else {
+      this.setState({
+        dataSource: [...newData]
+      });
+      // }
     } else {
       this.setState({ dataSource: this.props.dataSource });
     }
@@ -120,7 +132,7 @@ export default class RNModalPicker extends PureComponent {
     return (
       <View style={styles.mainContainer}>
         {this.state.selectedFlag ? (
-          <View>
+          <View style={{ width: '100%' }}>
             <TouchableOpacity
               disabled={this.props.disablePicker}
               onPress={() => this.setState({ modalVisible: true })}
@@ -132,13 +144,17 @@ export default class RNModalPicker extends PureComponent {
                   this.props.pickerStyle,
                   this.props.selectLabelTextStyle,
                   this.props.dropDownImageStyle,
-                  this.props.dropDownImage
+                  this.props.dropDownImage,
+                  this.props.inputHeadingText,
+                  this.props.inputHeadingTextStyle,
+                  this.props.selectedCityStyle,
+                  this.props.textBoxStyle
                 )}
               </View>
             </TouchableOpacity>
           </View>
         ) : (
-            <View>
+            <View style={{ width: '100%' }}>
               <TouchableOpacity
                 disabled={this.props.disablePicker}
                 style={styles.picker}
@@ -151,7 +167,11 @@ export default class RNModalPicker extends PureComponent {
                     this.props.pickerStyle,
                     this.props.placeHolderTextStyle,
                     this.props.dropDownImageStyle,
-                    this.props.dropDownImage
+                    this.props.dropDownImage,
+                    this.props.inputHeadingText,
+                    this.props.inputHeadingTextStyle,
+                    this.props.selectedCityStyle,
+                    this.props.textBoxStyle
                   )}
                 </View>
               </TouchableOpacity>
@@ -203,6 +223,7 @@ export default class RNModalPicker extends PureComponent {
                     }
                     placeholder={this.props.searchBarPlaceHolder}
                     style={styles.textInputStyle}
+                    autoCorrect={false}
                     underlineColorAndroid="transparent"
                     keyboardType="default"
                     returnKeyType={"done"}
@@ -324,6 +345,22 @@ RNModalPicker.propTypes = {
   disablePicker: PropTypes.bool,
   changeAnimation: PropTypes.string,
   searchBarPlaceHolder: PropTypes.string,
+  inputHeadingText: PropTypes.string,
+  inputHeadingTextStyle: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.object,
+    PropTypes.array
+  ]),
+  textBoxStyle: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.object,
+    PropTypes.array
+  ]),
+  selectedCityStyle: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.object,
+    PropTypes.array
+  ]),
   pickerItemTextStyle: PropTypes.oneOfType([
     PropTypes.number,
     PropTypes.object,
@@ -365,9 +402,6 @@ RNModalPicker.propTypes = {
 const styles = StyleSheet.create({
   mainContainer: {
     flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-    alignSelf: "center"
   },
   pickerTitleContainerStyle: {
     flexDirection: "row",
