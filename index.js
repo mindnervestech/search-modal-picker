@@ -20,7 +20,8 @@ export default class RNModalPicker extends PureComponent {
     this.state = {
       modalVisible: false,
       selectedFlag: this.props.defaultValue,
-      dataSource: []
+      dataSource: [],
+      noCitiesAvailbale: false,
     };
   }
 
@@ -93,6 +94,9 @@ export default class RNModalPicker extends PureComponent {
         const textData = searchText.toUpperCase();
         return itemData.startsWith(textData);
       });
+      if (newData.length == 0) {
+        this.setState({ noCitiesAvailbale: true })
+      }
       // if (newData.length == 0) {
       //   const newObj = [{ id: 999, name: searchText }]
       //   this.setState({
@@ -197,7 +201,7 @@ export default class RNModalPicker extends PureComponent {
 
                 <TouchableOpacity
                   activeOpacity={0.7}
-                  onPress={() => this.setState({ modalVisible: false })}
+                  onPress={() => this.setState({ modalVisible: false, noCitiesAvailbale: false })}
                 >
                   <Image
                     resizeMode="contain"
@@ -231,24 +235,27 @@ export default class RNModalPicker extends PureComponent {
                   />
                 </View>
               ) : null}
-
-              <FlatList
-                style={styles.flatListStyle}
-                keyExtractor={item => item.name}
-                showsVerticalScrollIndicator={false}
-                extraData={this.state}
-                overScrollMode="never"
-                keyboardShouldPersistTaps="always"
-                numColumns={1}
-                data={this.state.dataSource}
-                renderItem={({ item, index }) =>
-                  this._renderItemListValues(item, index)
-                }
-              />
+              {this.state.noCitiesAvailbale ?
+                <View style={{ paddingVertical: 10, alignItems: 'center' }}>
+                  <Text style={{ paddingVertical: 10 }}>{"City Not Found"}</Text>
+                </View> :
+                <FlatList
+                  style={styles.flatListStyle}
+                  keyExtractor={item => item.name}
+                  showsVerticalScrollIndicator={false}
+                  extraData={this.state}
+                  overScrollMode="never"
+                  keyboardShouldPersistTaps="always"
+                  numColumns={1}
+                  data={this.state.dataSource}
+                  renderItem={({ item, index }) =>
+                    this._renderItemListValues(item, index)
+                  }
+                />}
             </View>
           </View>
         </Modal>
-      </View>
+      </View >
     );
   }
 }
