@@ -94,9 +94,7 @@ export default class RNModalPicker extends PureComponent {
         const textData = searchText.toUpperCase();
         return itemData.startsWith(textData);
       });
-      if (newData.length == 0) {
-        this.setState({ noCitiesAvailbale: true })
-      }
+      this.setState({ noCitiesAvailbale: newData.length == 0 ? true : false });
       // if (newData.length == 0) {
       //   const newObj = [{ id: 999, name: searchText }]
       //   this.setState({
